@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+     <title>CMPE 273</title>
+     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  
+<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+  api_key: //enter your api key
+  onLoad: OnLinkedInFrameworkLoad
+  authorize: true
+</script>
+ <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+    <script type="in/Login">
+</script>
+<input  type="button" value="logout" onclick="logout()"/>
+<script type="text/javascript">
+function logout(){
+	IN.User.logout(function(){
+		console.log("Logged out successfully");
+	}, function(){
+		console.log("Error Logging out");
+	});
+}
+
+function OnLinkedInFrameworkLoad() {
+	IN.User.authorize(function(){
+		console.log("User logged In");
+		IN.Event.on(IN, "auth", OnLinkedInAuth);
+	}, function(){
+			console.log("User logged Out");
+	});
+  //IN.Event.on(IN, "auth", OnLinkedInAuth);
+}
+function OnLinkedInAuth() {
+
+	url = '/people/~:(id,first-name,last-name,skills)?format=json';
+	IN.API.Raw().url(url).method('GET').body().result(function(res){
+		var firstName = res.firstName;
+		var lastName = res.lastName;
+		console.log(firstName + " " + lastName);
+		var skills= res.skills.values;
+		skills.forEach(function(skill){
+			console.log(skill.skill.name);
+		})
+	});
+}
+</script>
+
   </body>
 </html>
