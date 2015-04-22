@@ -5,14 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var routes = require('./routes/index');
-var courseRoutes = require('./routes/course');
-var users = require('./routes/users');
 
 mongoose.connect('mongodb://sumit:sumit@proximus.modulusmongo.net:27017/ep5epidO');
 
-require('./mmodels/Users');
-require('./mmodels/Courses');
+require('./models/Users');
+require('./models/Courses');
+
+var routes = require('./routes/index');
+var courseRoutes = require('./routes/course');
+var users = require('./routes/users');
 
 var app = express();
 

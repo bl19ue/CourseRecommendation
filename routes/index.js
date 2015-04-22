@@ -11,11 +11,50 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/user/:userid/courses', function(req, res){
+router.get('/user/:userid/courses/:numresult', function(req, res){
 	var userid = req.params.userid;
+	var num_result = req.params.numresult;
 	
-	
+	findUser().then(function(user){
+		
+		var skills = user.skills;
+		
+		getCourses(skills, num_result).then(function(result){
+			
+			respondData(res, result);
+			
+		}).fail(function(err){
+			
+			console.log(err);
+			
+		});
+		
+	}).fail(function(err){
+		
+		console.log(err);
+		
+	});
 });
+
+function respondData(res, data){
+	res.json({
+		type: true,
+		data: data
+	});
+}
+
+function getCourses(skills, max_results){
+	var deferred = Q.defer();
+	var results = [];
+	
+	skills.forEach(function(skill){
+		//Get the courses for this skill with limit set to [max_results]
+		
+		//results.push(COURSES);
+	});
+	deferred.resolve(results);
+	return deferred.promise;
+}
 
 function findUser(userid){
 	var deferred = Q.defer();
