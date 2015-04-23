@@ -1,53 +1,107 @@
 <!DOCTYPE html>
 <html>
-  <head>
-     <title>CMPE 273</title>
-     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  
-<script type="text/javascript" src="http://platform.linkedin.com/in.js">
-  api_key: //enter your api key
-  onLoad: OnLinkedInFrameworkLoad
-  authorize: true
-</script>
- <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+	<head>
+		<title>CMPE 273</title>
+		<script type="text/javascript" src="//platform.linkedin.com/in.js">
+			api_key: 
+			onLoad: OnLinkedInFrameworkLoad
+			authorize: true
+		</script>
+		
+		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.css">
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body>
 
-    <script type="in/Login">
-</script>
-<input  type="button" value="logout" onclick="logout()"/>
-<script type="text/javascript">
-function logout(){
-	IN.User.logout(function(){
-		console.log("Logged out successfully");
-	}, function(){
-		console.log("Error Logging out");
-	});
-}
+		<nav class="grey darken-3 lighten-1" role="navigation">
+			<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">CMPE 273</a>
+				<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+			</div>
+		</nav>
 
-function OnLinkedInFrameworkLoad() {
-	IN.User.authorize(function(){
-		console.log("User logged In");
-		IN.Event.on(IN, "auth", OnLinkedInAuth);
-	}, function(){
-			console.log("User logged Out");
-	});
-  //IN.Event.on(IN, "auth", OnLinkedInAuth);
-}
-function OnLinkedInAuth() {
 
-	url = '/people/~:(id,first-name,last-name,skills)?format=json';
-	IN.API.Raw().url(url).method('GET').body().result(function(res){
-		var firstName = res.firstName;
-		var lastName = res.lastName;
-		console.log(firstName + " " + lastName);
-		var skills= res.skills.values;
-		skills.forEach(function(skill){
-			console.log(skill.skill.name);
-		})
-	});
-}
-</script>
+		<div class="container">
+			<div class="section">
+				<div class="row">
+					<form class="col s6">
+						<h4>Sign In Using Linked IN</h4>
+						<div class="input-field col s12">
+							<script type="in/Login">
+							</script>
+						</div>
+						<div class="input-field col s12 center" id="logoutDiv" style="display:none">          
+							<a class="btn waves-effect waves-light grey darken-3" onclick="logout();">Logout</a>
+						</div>
+					</form>
 
-  </body>
+					<div class="col s6">
+						<h4 id="username"></h4>
+						<table class="hoverable" id="skillsList">
+							<thead>
+								<tr>
+									<th data-field="skills">Skills</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			
+			function logout(){
+				IN.User.logout(function(){
+					$("#skillsList tbody").empty();
+					$("#username").html("");
+					console.log("Logged out successfully");
+					$('#logoutDiv').hide();
+				}, function(){
+					console.log("Error Logging out");
+				});
+			}
+
+			function OnLinkedInFrameworkLoad() {
+				IN.User.authorize(function(){
+					console.log("User logged In");
+					OnLinkedInAuth();
+					IN.Event.on(IN, "auth", OnLinkedInAuth);
+					$('#logoutDiv').show();
+				}, function(){
+					console.log("User logged Out");
+				});
+				//IN.Event.on(IN, "auth", OnLinkedInAuth);
+			}
+			function OnLinkedInAuth() {
+				console.log("OnLinkedInAuth");
+				url = '/people/~:(id,first-name,last-name,skills)?format=json';
+				IN.API.Raw().url(url).method('GET').body().result(function(res){
+					var firstName = res.firstName;
+					var lastName = res.lastName;
+					console.log(firstName + " " + lastName);
+					var skills= res.skills.values;
+					$("#username").html(firstName + " " + lastName);
+					$("#skillsList tbody").empty();
+
+					skills.forEach(function(skill){
+						console.log(skill.skill.name);
+						
+						var tr = "<tr>";
+						tr+="<td>"+ skill.skill.name +"</td>";
+						tr+="</tr>";
+						$("#skillsList tbody").append(tr);              
+					})
+				});
+			}
+			
+		</script>
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="/javascripts/materialize.js"></script>   
+
+	</body>
 </html>
