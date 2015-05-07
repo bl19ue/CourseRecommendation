@@ -3,7 +3,7 @@
 	<head>
 		<title>CMPE 273</title>
 		<script type="text/javascript" src="//platform.linkedin.com/in.js">
-			api_key: 
+			api_key: 78v5uwh7n4wme2
 			onLoad: OnLinkedInFrameworkLoad
 			authorize: true
 		</script>
@@ -79,14 +79,28 @@
 			}
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
-				url = '/people/~:(id,first-name,last-name,skills)?format=json';
+				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions)?format=json';
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
 					var firstName = res.firstName;
 					var lastName = res.lastName;
 					console.log(firstName + " " + lastName);
 					var skills= res.skills.values;
+					var currentPositions = res.threeCurrentPositions.values;
+					var pastPositions = res.threePastPositions.values;
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
+
+					currentPositions.forEach(function(position){
+						console.log(position.summary);
+						console.log(position.startDate);
+						console.log(position.startDate);
+					});
+
+					pastPositions.forEach(function(position){
+						console.log(position.summary);
+						console.log(position.startDate);
+						console.log(position.startDate);
+					});
 
 					skills.forEach(function(skill){
 						console.log(skill.skill.name);
