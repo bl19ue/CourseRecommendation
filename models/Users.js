@@ -7,3 +7,22 @@ var UserSchema = new mongoose.Schema({
 });
 
 mongoose.model('Users', UserSchema, 'Users');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
