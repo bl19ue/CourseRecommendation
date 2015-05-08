@@ -91,24 +91,8 @@
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
 
-					currentPositions.forEach(function(position){
-						console.log(position.summary);
-						console.log(position.startDate);
-						console.log(position.startDate);
-					});
-
-					pastPositions.forEach(function(position){
-						console.log(position.summary);
-						console.log(position.startDate);
-						console.log(position.startDate);
-					});
-
-					pros.forEach(function(project){
-						console.log(project.description);
-					});
-
 					skills.forEach(function(skill){
-						console.log(skill.skill.name);
+						console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
 						
 						var tr = "<tr>";
 						tr+="<td>"+ skill.skill.name +"</td>";
@@ -116,6 +100,21 @@
 						$("#skillsList tbody").append(tr);              
 					})
 				});
+			}
+
+			function scanProjects(projects, skill)
+			{
+				var count =0;
+					projects.forEach(function(project){
+						count = count + countOcurrences(project.description, skill);
+					});
+				return count;
+			}
+
+			function countOcurrences(str, value)
+			{
+   				var regExp = new RegExp(value, "gi");
+   				return str.match(regExp) ? str.match(regExp).length : 0;  
 			}
 			
 		</script>
