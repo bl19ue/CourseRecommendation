@@ -79,18 +79,26 @@
 			}
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
+
 				url = '/people/~:(id,first-name,last-name,skills,three-past-positions)?format=json';
+
+				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
+
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
 					console.log(res);
 					var firstName = res.firstName;
 					var lastName = res.lastName;
 					console.log(firstName + " " + lastName);
 					var skills= res.skills.values;
+					var currentPositions = res.threeCurrentPositions.values;
+					var pastPositions = res.threePastPositions.values;
+					var pros = res.projects.values;
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
 
 					skills.forEach(function(skill){
-						//console.log(skill.skill.name);
+
+						console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
 						
 						var tr = "<tr>";
 						tr+="<td>"+ skill.skill.name +"</td>";
@@ -98,6 +106,21 @@
 						$("#skillsList tbody").append(tr);              
 					})
 				});
+			}
+
+			function scanProjects(projects, skill)
+			{
+				var count =0;
+					projects.forEach(function(project){
+						count = count + countOcurrences(project.description, skill);
+					});
+				return count;
+			}
+
+			function countOcurrences(str, value)
+			{
+   				var regExp = new RegExp(value, "gi");
+   				return str.match(regExp) ? str.match(regExp).length : 0;  
 			}
 			
 		</script>
