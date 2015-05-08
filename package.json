@@ -15,6 +15,7 @@
 		"ejs": "~1.0.0",
 		"mongoose": "*",
 		"q": "*",
-		"request":"*"
+		"request":"*",
+		"async":"*"
 	}
 }
