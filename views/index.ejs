@@ -77,6 +77,7 @@
 				});
 				//IN.Event.on(IN, "auth", OnLinkedInAuth);
 			}
+
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
 				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
@@ -90,6 +91,16 @@
 					var pros = res.projects.values;
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
+
+					var yearsOfExperience=0;
+					currentPositions.forEach(function(position){
+						var endDate = {year:new Date().getFullYear()};
+						yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, endDate);
+					});
+					pastPositions.forEach(function(position){
+						yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
+					});
+					console.log(yearsOfExperience);
 
 					skills.forEach(function(skill){
 						console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
@@ -115,6 +126,14 @@
 			{
    				var regExp = new RegExp(value, "gi");
    				return str.match(regExp) ? str.match(regExp).length : 0;  
+			}
+
+			function calculateYears(startDate, endDate)
+			{
+				
+				var stYear = startDate.year;
+				var endYear = endDate.year;
+				return endYear-stYear;
 			}
 			
 		</script>
