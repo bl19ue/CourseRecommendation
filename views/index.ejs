@@ -79,7 +79,7 @@
 			}
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
-				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions)?format=json';
+				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
 					var firstName = res.firstName;
 					var lastName = res.lastName;
@@ -87,6 +87,7 @@
 					var skills= res.skills.values;
 					var currentPositions = res.threeCurrentPositions.values;
 					var pastPositions = res.threePastPositions.values;
+					var pros = res.projects.values;
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
 
@@ -100,6 +101,10 @@
 						console.log(position.summary);
 						console.log(position.startDate);
 						console.log(position.startDate);
+					});
+
+					pros.forEach(function(project){
+						console.log(project.description);
 					});
 
 					skills.forEach(function(skill){
