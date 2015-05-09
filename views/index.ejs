@@ -103,24 +103,46 @@
 
 					var objectArray = new Array();
 					skills.forEach(function(skill){
-						var name = skill.skill.name;
-						var skillOccCount = scanProjects(pros, name);
-						var temp = {name : skillOccCount};
 
-						var obj = {};
-						obj[name] = skillOccCount;
-						objectArray.push(obj);
-						
+						if(skill.skill.name != 'C++'){
+						//console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
+							var name = skill.skill.name;
+							var skillOccCount = scanProjects(pros, name);
+							//var temp = {name : skillOccCount};
+							if(skillOccCount<5){
+								var obj = {};
+								obj['skill'] = name;
+								obj['count'] = skillOccCount;
+								objectArray.push(obj);
+							}
+						}
 						var tr = "<tr>";
 						tr+="<td>"+ skill.skill.name +"</td>";
 						tr+="</tr>";
 						$("#skillsList tbody").append(tr);              
 					})
-
-					console.log(objectArray);
+					objectArray.sort(function(a,b){
+						return b.count - a.count;
+					});
+					//console.log(objectArray);
+					recommendCourses(objectArray);
 				});
-					
+			}
 
+			function recommendCourses(objectArray){
+				console.log(objectArray);
+				$.ajax({
+					method: "POST",
+					url: "/rules/recommend",
+					cache: false,
+					data: {data : JSON.stringify(objectArray)},
+					success: function(res){
+						alert(res.data);
+					},
+					error: function(err){
+
+					}
+				});
 			}
 
 			function scanProjects(projects, skill)

@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+var PORT = 3000;
+
 mongoose.connect('mongodb://sumit:sumit@proximus.modulusmongo.net:27017/ep5epidO');
 
 require('./models/Users');
@@ -14,6 +16,7 @@ require('./models/Courses');
 var routes = require('./routes/index');
 var courseRoutes = require('./routes/course');
 var users = require('./routes/users');
+var rules = require('./routes/rules');
 
 var app = express();
 
@@ -38,6 +41,7 @@ app.use(function(req, res, next) {
 app.use('/', routes);
 app.use('/courses', courseRoutes);
 app.use('/users', users);
+app.use('/rules' , rules)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -70,5 +74,5 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
+app.listen(PORT);
 module.exports = app;
