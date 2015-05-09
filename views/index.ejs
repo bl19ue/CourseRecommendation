@@ -3,7 +3,7 @@
 	<head>
 		<title>CMPE 273</title>
 		<script type="text/javascript" src="//platform.linkedin.com/in.js">
-			api_key: 
+			api_key: 78v5uwh7n4wme2
 			onLoad: OnLinkedInFrameworkLoad
 			authorize: true
 		</script>
@@ -69,20 +69,15 @@
 			function OnLinkedInFrameworkLoad() {
 				IN.User.authorize(function(){
 					console.log("User logged In");
-					OnLinkedInAuth();
 					IN.Event.on(IN, "auth", OnLinkedInAuth);
 					$('#logoutDiv').show();
 				}, function(){
 					console.log("User logged Out");
 				});
-				//IN.Event.on(IN, "auth", OnLinkedInAuth);
 			}
 
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
-
-				url = '/people/~:(id,first-name,last-name,skills,three-past-positions)?format=json';
-
 				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
 
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
@@ -105,18 +100,27 @@
 					pastPositions.forEach(function(position){
 						yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
 					});
-					console.log(yearsOfExperience);
 
+					var objectArray = new Array();
 					skills.forEach(function(skill){
+						var name = skill.skill.name;
+						var skillOccCount = scanProjects(pros, name);
+						var temp = {name : skillOccCount};
 
-						console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
+						var obj = {};
+						obj[name] = skillOccCount;
+						objectArray.push(obj);
 						
 						var tr = "<tr>";
 						tr+="<td>"+ skill.skill.name +"</td>";
 						tr+="</tr>";
 						$("#skillsList tbody").append(tr);              
 					})
+
+					console.log(objectArray);
 				});
+					
+
 			}
 
 			function scanProjects(projects, skill)
@@ -136,7 +140,6 @@
 
 			function calculateYears(startDate, endDate)
 			{
-				
 				var stYear = startDate.year;
 				var endYear = endDate.year;
 				return endYear-stYear;
