@@ -5,7 +5,9 @@ var CourseSchema = new mongoose.Schema({
 	shortName:String,
 	name:String,
 	about: [{type: String}],
-	url: String
+	url: String,
+	skills:[],
+	level: {type: Number, enum: [1,2,3]}
 });
 
 mongoose.model('Courses', CourseSchema, 'Courses');
