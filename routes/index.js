@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Q = require('q');
+var request = require("request")
 
 var UserSchema = mongoose.model('Users');
 var CourseSchema = mongoose.model('Courses');
@@ -109,9 +110,50 @@ function findUser(name){
 	return deferred.promise;
 }
 
-router.get('/courses', function(req, res){
-	console.log(req.body);
-	attachPopularity(req.body).then(function(newCourseBySkills){
+router.get('/mycourses', function(req, res){
+	var obj = [
+		{
+			skill: "Java",
+			courses: [
+				{
+					name: "Advanced Java",
+					url: "http://www.facebook.com"
+				},
+				{
+					name: "Core Java",
+					url: "http://www.google.com"
+				}
+			]
+		}, 
+		{
+			skill: "Android",
+			courses: [
+				{
+					name: "Advanced Android",
+					url: "http://www.amazon.com"
+				},
+				{
+					name: "Core Android",
+					url: "http://www.yahoo.com"
+				}
+			]
+		},
+		{
+			skill: "iOS",
+			courses: [
+				{
+					name: "Advanced iOS",
+					url: "http://www.apple.com"
+				},
+				{
+					name: "Core iOS",
+					url: "http://www.nike.com"
+				}
+			]
+		}
+	];
+	console.log(obj);
+	attachPopularity(obj).then(function(newCourseBySkills){
 		respondData(res, newCourseBySkills);
 	}).fail(function(err){
 		console.log(err);
@@ -122,8 +164,10 @@ var attachPopularity = function(coursesBySkills){
 	var count = 0;
 	var deferred = Q.defer();
 	var newCourseBySkills = [];
+	var length = coursesBySkills.length;
 	coursesBySkills.forEach(function(oneSkillCourses){
 		attachHitsToCourses(oneSkillCourses).then(function(courses){
+			console.log('courses in one skill:' + courses);
 			newCourseBySkills.push({
 				skill : oneSkillCourses.skill,
 				courses : courses
@@ -148,10 +192,10 @@ var attachHitsToCourses = function(oneSkillCourses){
 	var length = oneSkillCourses.courses.length;
 	var courses = [];
 
-	oneSkillCourses.course.forEach(function(course){
+	oneSkillCourses.courses.forEach(function(course){
 		var url = course.url;
 		fetchSharedCount(url).then(function(popularity){
-
+			console.log('popularity of course:' + course.name + " " + popularity);
 			courses.push({
 				details: course,
 				popularity: popularity
