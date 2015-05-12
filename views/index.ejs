@@ -15,26 +15,44 @@
 	<body>
 
 		<nav class="grey darken-3 lighten-1" role="navigation">
-			<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">CMPE 273</a>
+			<div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo">Linked<img src="./images/ico/favicon.ico" width=25px;/> - Coursera</a>
+			<ul class="right hide-on-med-and-down">
+				<script type="in/Login">
+				</script>
+			</ul>
+			<ul class="right hide-on-med-and-down" id="logoutDiv" style="display:none">          
+				<li><a class="" onclick="logout();">Logout</a></li>
+			</ul>
 				<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 			</div>
 		</nav>
-
-
 		<div class="container">
-			<div class="section">
+			<div class="section" id="homeDiv">
+				<div class="row center">
+					<h4>Please Log In to get coursera courses.</h4>
+				</div>
+			</div>
+			<div class="section" id="userDiv">
 				<div class="row">
-					<form class="col s6">
-						<h4>Sign In Using Linked IN</h4>
-						<div class="input-field col s12">
-							<script type="in/Login">
-							</script>
-						</div>
-						<div class="input-field col s12 center" id="logoutDiv" style="display:none">          
-							<a class="btn waves-effect waves-light grey darken-3" onclick="logout();">Logout</a>
-						</div>
-						<h4 id="">Recommended Courses</h4>
-						<table class="hoverable" id="courseList">
+					<h4 class="col s6" id="">Recommended Courses</h4>
+					<h5 class="col s6 right-align" id="username"></h5>
+				</div>
+				<div class="row">
+				
+					<div class="col s12 l4 m4">
+						
+						<table class="" id="skillsList">
+							<thead>
+								<tr>
+									<th data-field="skills">Skills</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<form class="col s12 l8 m8">						
+						<table class="" id="courseList">
 							<thead>
 								<tr>
 									<th data-field="Course Name">Course Name</th>
@@ -44,46 +62,37 @@
 							<tbody>
 							</tbody>
 						</table>
-
-					</form>
-
-					<div class="col s6">
-						<h4 id="username"></h4>
-						<table class="hoverable" id="skillsList">
-							<thead>
-								<tr>
-									<th data-field="skills">Skills</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-
-
-					</div>
+					</form>	
 				</div>
 			</div>
 		</div>
 
 		<script type="text/javascript">
-			
 			function logout(){
 				IN.User.logout(function(){
 					$("#skillsList tbody").empty();
+					$("#courseList tbody").empty();
 					$("#username").html("");
 					console.log("Logged out successfully");
 					$('#logoutDiv').hide();
+					$('#userDiv').hide();
+					$('#homeDiv').show();
 				}, function(){
 					console.log("Error Logging out");
 				});
 			}
 
 			function OnLinkedInFrameworkLoad() {
+
 				IN.User.authorize(function(){
 					console.log("User logged In");
 					IN.Event.on(IN, "auth", OnLinkedInAuth);
+					$('#homeDiv').hide();
 					$('#logoutDiv').show();
+					$('#userDiv').show();
 				}, function(){
+					$('#homeDiv').show();
+					$('#userDiv').hide();
 					console.log("User logged Out");
 				});
 			}
@@ -166,7 +175,7 @@
 							courses.forEach(function(course){
 								var tr = "<tr>";
 								tr+="<td>"+ course.name +"</td>";
-								tr+="<td>"+ course.url +"</td>";
+								tr+="<td><a href='"+ course.url +"'>"+ course.url+ " </a></td>";
 								tr+="</tr>";
 								$("#courseList tbody").append(tr);              
 								console.log(course.name);
