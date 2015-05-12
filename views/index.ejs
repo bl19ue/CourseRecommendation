@@ -34,14 +34,12 @@
 			</div>
 			<div class="section" id="userDiv">
 				<div class="row">
-					<h4 class="col s6" id="">Recommended Courses</h4>
-					<h5 class="col s6 right-align" id="username"></h5>
+					<h5 class="col s12 l4 m4 left-align" id="username"></h5>
+					<h4 class="col s12 l8 m8 center-align" id="">Recommended Courses</h4>
 				</div>
 				<div class="row">
-				
 					<div class="col s12 l4 m4">
-						
-						<table class="" id="skillsList">
+						<!-- <table class="" id="skillsList">
 							<thead>
 								<tr>
 									<th data-field="skills">Skills</th>
@@ -49,13 +47,16 @@
 							</thead>
 							<tbody>
 							</tbody>
-						</table>
+						</table> -->
+						<ul class="" id="skillsTags">
+						</ul>
 					</div>
 					<form class="col s12 l8 m8">						
 						<table class="" id="courseList">
 							<thead>
 								<tr>
-									<th data-field="Course Name">Course Name</th>
+									<th data-field="SkillName">Skill</th>
+									<th data-field="CourseName">Course Name</th>
 									<th data-field="URL">URL</th>
 								</tr>
 							</thead>
@@ -64,13 +65,23 @@
 						</table>
 					</form>	
 				</div>
+				<div class="row">
+					<div class="col s12 l12 m12">
+						<ul class="" id="skillsTags">
+						</ul>
+					</div>
+				</div>
 			</div>
-		</div>
 
+		</div>
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="/javascripts/materialize.js"></script>
+		<script type="text/javascript" src="/javascripts/jquery.tx3-tag-cloud.js" ></script>
 		<script type="text/javascript">
 			function logout(){
 				IN.User.logout(function(){
-					$("#skillsList tbody").empty();
+					// $("#skillsList tbody").empty();
+					$("#skillsTags").empty();
 					$("#courseList tbody").empty();
 					$("#username").html("");
 					console.log("Logged out successfully");
@@ -90,6 +101,7 @@
 					$('#homeDiv').hide();
 					$('#logoutDiv').show();
 					$('#userDiv').show();
+					
 				}, function(){
 					$('#homeDiv').show();
 					$('#userDiv').hide();
@@ -102,7 +114,7 @@
 				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
 
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
-					console.log(res);
+					//console.log(res);
 					var firstName = res.firstName;
 					var lastName = res.lastName;
 					console.log(firstName + " " + lastName);
@@ -111,7 +123,8 @@
 					var pastPositions = res.threePastPositions.values;
 					var pros = res.projects.values;
 					$("#username").html(firstName + " " + lastName);
-					$("#skillsList tbody").empty();
+					// $("#skillsList tbody").empty();
+					$("#skillsTags").empty();
 					$("#courseList tbody").empty();
 
 					var yearsOfExperience=0;
@@ -143,15 +156,24 @@
 									objectArray.push(obj);
 								}
 							}
-							var tr = "<tr>";
-							tr+="<td>"+ skill.skill.name +"</td>";
-							tr+="</tr>";
-							$("#skillsList tbody").append(tr);              
+							// var tr = "<tr>";
+							// tr+="<td>"+ skill.skill.name +"</td>";
+							// tr+="</tr>";
+							// $("#skillsList tbody").append(tr);
+							var li = "<li data-weight='" + parseInt(Math.random() * 25) + "'>";
+							li+=skill.skill.name;
+							li+= "</li>";
+							$("#skillsTags").append(li);
 						})
 						objectArray.sort(function(a,b){
 							return b.count - a.count;
 						});
 						//console.log(objectArray);
+						$("#skillsTags").tx3TagCloud({
+							multiplier: 2 // default multiplier is "1"
+						});
+
+
 						recommendCourses(objectArray);
 					}else{
 						//if user doesn't have any skills than 
@@ -163,6 +185,7 @@
 
 			function recommendCourses(objectArray){
 				//console.log(objectArray);
+
 				$.ajax({
 					method: "POST",
 					url: "/rules/recommend",
@@ -174,6 +197,7 @@
 							courses = JSON.parse(skill.courses);
 							courses.forEach(function(course){
 								var tr = "<tr>";
+								tr+="<td>"+ skill.skill +"</td>";
 								tr+="<td>"+ course.name +"</td>";
 								tr+="<td><a href='"+ course.url +"'>"+ course.url+ " </a></td>";
 								tr+="</tr>";
@@ -213,8 +237,6 @@
 			}
 			
 		</script>
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="/javascripts/materialize.js"></script>   
-
+		
 	</body>
 </html>
