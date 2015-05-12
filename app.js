@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var nodemailer = require("nodemailer");
 
 var PORT = 3001;
 
@@ -12,6 +13,7 @@ mongoose.connect('mongodb://sumit:sumit@proximus.modulusmongo.net:27017/ep5epidO
 
 require('./models/Users');
 require('./models/Courses');
+//require('./utils/mailer');
 
 var routes = require('./routes/index');
 var courseRoutes = require('./routes/course');
