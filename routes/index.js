@@ -51,7 +51,7 @@ function findCourse(skill, max_results){
 		}
 		else{
 			var obj = {
-				
+
 			}
 			//console.log(courses);
 			deferred.resolve(courses);
@@ -68,7 +68,7 @@ function getCourses(skills, max_results){
 	var count = 0;
 	skills.forEach(function(skill){
 		//Get the courses for this skill with limit set to [max_results]
-		
+
 		findCourse(skill, max_results).then(function(courses){
 			console.log('skill:'+skill);
 			results.push({
@@ -86,7 +86,7 @@ function getCourses(skills, max_results){
 		//results.push(COURSES);
 	});
 	console.log('check results:' + results[0]);
-	
+
 	return deferred.promise;
 }
 
@@ -109,37 +109,108 @@ function findUser(name){
 	return deferred.promise;
 }
 
+router.get('/courses', function(req, res){
+	console.log(req.body);
+	attachPopularity(req.body).then(function(newCourseBySkills){
+		respondData(res, newCourseBySkills);
+	}).fail(function(err){
+		console.log(err);
+	});
+});
 
+var attachPopularity = function(coursesBySkills){
+	var count = 0;
+	var deferred = Q.defer();
+	var newCourseBySkills = [];
+	coursesBySkills.forEach(function(oneSkillCourses){
+		attachHitsToCourses(oneSkillCourses).then(function(courses){
+			newCourseBySkills.push({
+				skill : oneSkillCourses.skill,
+				courses : courses
+			});
+			if(count == length - 1){
+				deferred.resolve(newCourseBySkills);
+			}
+			count++;
+		}).fail(function(err){
+			console.log(err);
+			deferred.reject(err);
+		});
+
+	});
+
+	return deferred.promise;
+}
+
+var attachHitsToCourses = function(oneSkillCourses){
+	var count = 0;	
+	var deferred = Q.defer();
+	var length = oneSkillCourses.courses.length;
+	var courses = [];
+
+	oneSkillCourses.course.forEach(function(course){
+		var url = course.url;
+		fetchSharedCount(url).then(function(popularity){
+
+			courses.push({
+				details: course,
+				popularity: popularity
+			});
+
+			if(count == length - 1){
+				deferred.resolve(courses);
+			}
+			count++;
+		}).fail(function(err){
+			console.log(err);
+			return err;
+		});
+	});
+
+	return deferred.promise;
+}
+
+var rankCourses = function(coursesBySkills){
+	getPopularity(coursesBySkills).then(function(hitsByCourse){
+
+	}).fail(function(err){
+		console.log(err);
+	});
+}
+
+var filterTopUrls = function(coursesBySkills, hitsByCourses){
+	coursesBySkills.forEach(function(oneSkillCourse){
+
+	});
+};
 
 var getPopularity = function(coursesBySkills){
-	var deferred = Q.defer();
+
+	var courseHits = [];
 	var length = Object.keys(coursesBySkills).length;
-	var count = 0;
 	console.log('length of courseBySkills:' + length);
-	
-	var popularCoursesBySkills = {};
-	for(var skill in coursesBySkills){
-		if(coursesBySkills.hasOwnProperty(skill)){
-			
-			var url = coursesBySkills[skill].url;
-			
+	var count = 0;
+	var deferred = Q.defer();
+	coursesBySkills.forEach(function(oneSkillCourse){
+		oneSkillCourse.courses.forEach(function(course){
+			var url = course.url;
 			fetchSharedCount(url).then(function(hits){
-				
-				popularCoursesBySkills.push({
-					skill: skill,
+
+				courseHits.push({
 					url: url,
 					hits: hits
 				});
 				if(count == length - 1){
-					deferred.resolve(popularCoursesBySkills);
+					deferred.resolve(courseHits);
 				}
 				count++;
 			}).fail(function(err){
 				console.log(err);
+				deferred.reject(err);
 			});
-		}
-	}
-	
+		});
+	});
+
 	return deferred.promise;
 }
 
@@ -150,6 +221,7 @@ var fetchSharedCount = function(url){
 	var deferred = Q.defer();
 	var count = 0;
 	var fullUrl = sharedCountUrl + url + "&" + apikey;
+	var popularity = {};
 	request({
 		url: fullUrl,
 		json: true
@@ -159,7 +231,7 @@ var fetchSharedCount = function(url){
 		console.log("in sharedcount");
 		if(error){
 			//console.log("error:" + error);
-			return error;
+			deferred.reject(error);
 		}
 		else{
 			var hits = 0;
@@ -177,17 +249,23 @@ var fetchSharedCount = function(url){
 						}
 					}
 				}
-				
+
 				if(count == length - 1){
-					deferred.resolve(hits);
+					popularity.body = body;
+					popularity.hits = hits;
+
+					deferred.resolve(popularity);
 				}
-				
+
 				count++;
 			}
 
 		}	
+
 	});
+
 	return deferred.promise;
+
 }
 
 
