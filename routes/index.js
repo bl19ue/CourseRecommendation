@@ -109,4 +109,86 @@ function findUser(name){
 	return deferred.promise;
 }
 
+
+
+var getPopularity = function(coursesBySkills){
+	var deferred = Q.defer();
+	var length = Object.keys(coursesBySkills).length;
+	var count = 0;
+	console.log('length of courseBySkills:' + length);
+	
+	var popularCoursesBySkills = {};
+	for(var skill in coursesBySkills){
+		if(coursesBySkills.hasOwnProperty(skill)){
+			
+			var url = coursesBySkills[skill].url;
+			
+			fetchSharedCount(url).then(function(hits){
+				
+				popularCoursesBySkills.push({
+					skill: skill,
+					url: url,
+					hits: hits
+				});
+				if(count == length - 1){
+					deferred.resolve(popularCoursesBySkills);
+				}
+				count++;
+			}).fail(function(err){
+				console.log(err);
+			});
+		}
+	}
+	
+	return deferred.promise;
+}
+
+var sharedCountUrl = "http://free.sharedcount.com/?url=";
+var apikey = "apikey=922764bdfe8cedf35919617dc6a5d2a5fd09e8cd";
+
+var fetchSharedCount = function(url){
+	var deferred = Q.defer();
+	var count = 0;
+	var fullUrl = sharedCountUrl + url + "&" + apikey;
+	request({
+		url: fullUrl,
+		json: true
+	}, function(error, response, body){
+		var length = Object.keys(body).length;
+		console.log('length of body:' + length);
+		console.log("in sharedcount");
+		if(error){
+			//console.log("error:" + error);
+			return error;
+		}
+		else{
+			var hits = 0;
+			for(var socialMedia in body){
+				//console.log(socialMedia);
+				if(body.hasOwnProperty(socialMedia)){
+					if(socialMedia != 'Facebook'){
+						hits += body[socialMedia];
+						//console.log(body[socialMedia]);
+					}
+					else{
+						for(var facebookProperty in body[socialMedia]){
+							hits += body[socialMedia][facebookProperty];
+							//console.log('fb:' + body[socialMedia][facebookProperty]);
+						}
+					}
+				}
+				
+				if(count == length - 1){
+					deferred.resolve(hits);
+				}
+				
+				count++;
+			}
+
+		}	
+	});
+	return deferred.promise;
+}
+
+
 module.exports = router;

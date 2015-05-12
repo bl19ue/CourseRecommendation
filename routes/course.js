@@ -9,11 +9,14 @@ var CourseSchema = mongoose.model('Courses');
 
 var exports = module.exports = {};
 
-var required_categories= ['cs-programming', 'cs-systems', 'stats'];
+var required_categories= ['cs-programming', 'cs-systems'];
 
 var categoriesUrl = "https://api.coursera.org/api/catalog.v1/categories?includes=courses";
 
 var coursesUrl = "https://api.coursera.org/api/catalog.v1/courses?fields=aboutTheCourse,language";
+
+
+var sharedCountResults = {};
 
 var courseid_phase1 = [];
 
@@ -135,8 +138,7 @@ var fetchCourses = function(error, response, body){
 	}
 }
 
-var fetchAllCourses = function(res){
-	console.log('lol..');
+ fetchAllCourses = function(res){
 	async.series([
 		function(callback){
 			reqURL(categoriesUrl, fetchCategories);	
@@ -147,10 +149,49 @@ var fetchAllCourses = function(res){
 			reqURL(coursesUrl, fetchCourses);	
 			callback();
 		}
+//		
+//		function(callback){
+//			var url = sharedCountUrl + "http://www.facebook.com" + "&" + apikey; 
+//			hits = reqURL(url, fetchSharedCount);
+//			callback();
+//		},
+//		function(callback){
+//			res.json({
+//				data: hits
+//			});
+//			callback();
+//		}
 	]);
-	
-	
-	
+
+}
+
+var fetchSharedCount = function(error, response, body){
+	console.log("in sharedcount");
+	if(error){
+		//console.log("error:" + error);
+		return error;
+	}
+	else{
+		var hits = 0;
+		for(var socialMedia in body){
+			//console.log(socialMedia);
+			if(body.hasOwnProperty(socialMedia)){
+				if(socialMedia != 'Facebook'){
+					hits += body[socialMedia];
+					//console.log(body[socialMedia]);
+				}
+				else{
+					for(var facebookProperty in body[socialMedia]){
+						hits += body[socialMedia][facebookProperty];
+						//console.log('fb:' + body[socialMedia][facebookProperty]);
+					}
+				}
+			}
+		}
+		
+		console.log(hits);
+		
+	}
 }
 
 //REST APIs here
