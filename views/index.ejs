@@ -7,7 +7,7 @@
 			onLoad: OnLinkedInFrameworkLoad
 			authorize: true
 		</script>
-		
+		<link rel="shortcut icon" type="image/x-icon" href="./images/ico/favicon.ico">
 		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
 		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.css">
 		<link rel='stylesheet' href='/stylesheets/style.css' />
@@ -33,6 +33,18 @@
 						<div class="input-field col s12 center" id="logoutDiv" style="display:none">          
 							<a class="btn waves-effect waves-light grey darken-3" onclick="logout();">Logout</a>
 						</div>
+						<h4 id="">Recommended Courses</h4>
+						<table class="hoverable" id="courseList">
+							<thead>
+								<tr>
+									<th data-field="Course Name">Course Name</th>
+									<th data-field="URL">URL</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+
 					</form>
 
 					<div class="col s6">
@@ -91,53 +103,77 @@
 					var pros = res.projects.values;
 					$("#username").html(firstName + " " + lastName);
 					$("#skillsList tbody").empty();
+					$("#courseList tbody").empty();
 
 					var yearsOfExperience=0;
-					currentPositions.forEach(function(position){
-						var endDate = {year:new Date().getFullYear()};
-						yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, endDate);
-					});
-					pastPositions.forEach(function(position){
-						yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
-					});
-
+					if(currentPositions!==undefined){
+						currentPositions.forEach(function(position){
+							var endDate = {year:new Date().getFullYear()};
+							yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, endDate);
+						});
+					}
+					if(pastPositions!==undefined){
+					
+						pastPositions.forEach(function(position){
+							yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
+						});
+					}
 					var objectArray = new Array();
-					skills.forEach(function(skill){
+					if(skills!=undefined){
+						skills.forEach(function(skill){
 
-						if(skill.skill.name != 'C++'){
-						//console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
-							var name = skill.skill.name;
-							var skillOccCount = scanProjects(pros, name);
-							//var temp = {name : skillOccCount};
-							if(skillOccCount<5){
-								var obj = {};
-								obj['skill'] = name;
-								obj['count'] = skillOccCount;
-								objectArray.push(obj);
+							if(skill.skill.name != 'C++'){
+							//console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
+								var name = skill.skill.name;
+								var skillOccCount = scanProjects(pros, name);
+								//var temp = {name : skillOccCount};
+								if(skillOccCount<5){
+									var obj = {};
+									obj['skill'] = name;
+									obj['count'] = skillOccCount;
+									objectArray.push(obj);
+								}
 							}
-						}
-						var tr = "<tr>";
-						tr+="<td>"+ skill.skill.name +"</td>";
-						tr+="</tr>";
-						$("#skillsList tbody").append(tr);              
-					})
-					objectArray.sort(function(a,b){
-						return b.count - a.count;
-					});
-					//console.log(objectArray);
-					recommendCourses(objectArray);
+							var tr = "<tr>";
+							tr+="<td>"+ skill.skill.name +"</td>";
+							tr+="</tr>";
+							$("#skillsList tbody").append(tr);              
+						})
+						objectArray.sort(function(a,b){
+							return b.count - a.count;
+						});
+						//console.log(objectArray);
+						recommendCourses(objectArray);
+					}else{
+						//if user doesn't have any skills than 
+						// TO be done 
+						//recommendCourses();
+					}	
 				});
 			}
 
 			function recommendCourses(objectArray){
-				console.log(objectArray);
+				//console.log(objectArray);
 				$.ajax({
 					method: "POST",
 					url: "/rules/recommend",
 					cache: false,
 					data: {data : JSON.stringify(objectArray)},
 					success: function(res){
-						alert(res.data);
+						res.data.forEach(function(skill){
+							//console.log(skill);
+							courses = JSON.parse(skill.courses);
+							courses.forEach(function(course){
+								var tr = "<tr>";
+								tr+="<td>"+ course.name +"</td>";
+								tr+="<td>"+ course.url +"</td>";
+								tr+="</tr>";
+								$("#courseList tbody").append(tr);              
+								console.log(course.name);
+								console.log(course.url);
+							});
+						});
+						//alert(res.data);
 					},
 					error: function(err){
 
