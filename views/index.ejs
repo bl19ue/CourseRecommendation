@@ -41,6 +41,7 @@
 							<a class="col s4 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
 							<a class="col s4 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
 							<a class="col s4 waves-effect waves-light btn" id="emailBtn">Email</a>
+							<input type=hidden value="" id="useremail"></input>
 						</div>
 						<div class="row">
 							<h4>
@@ -125,12 +126,14 @@
 
 			function OnLinkedInAuth() {
 				console.log("OnLinkedInAuth");
-				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects)?format=json';
+				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects,email-address)?format=json';
 
 				IN.API.Raw().url(url).method('GET').body().result(function(res){
 					//console.log(res);
 					var firstName = res.firstName;
 					var lastName = res.lastName;
+					var emailaddress = res.emailAddress;
+					$('#useremail').val(emailaddress);
 					console.log(firstName + " " + lastName);
 					var skills= res.skills.values;
 					var currentPositions = res.threeCurrentPositions.values;
@@ -296,6 +299,38 @@
            $('#skillBasedBtn').click(function(){
            		console.log("skillBasedBtn clicked");
            		OnLinkedInAuth();
+           });
+
+           $('#emailBtn').click(function(){
+           		console.log("emailBtn clicked");
+           		
+           		email= $('#useremail').val();
+           		console.log(email);
+           		if(email!==""){
+           			var msgbody = $('#courseList tbody').html();
+           			console.log(msgbody);
+	           		$.ajax({
+	                   method: "POST",
+	                   url: '/mailer/email',
+	                   data:{emailId:email, body:msgbody},
+	                   cache: false,
+	                   success: function(res){
+	                   		console.log(res);
+	                   		if(res.type){
+	                   			alert(res.status);
+	                   		}else{
+	                   			alert(res.status);
+	                   		}
+	                   
+	                  	// console.log("objectArray:" + objectArray);
+	                   		callback(objectArray);
+							
+	                   },
+	                   error: function(err){
+
+	                   }
+	               });
+           		}
            });
 
 			
