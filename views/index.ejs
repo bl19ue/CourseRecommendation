@@ -30,7 +30,7 @@
             <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
         </div>
     </nav>
-    <div class="">
+    <div class="container">
         <div class="section" id="homeDiv">
             <div class="row center">
                 <h4>Please Log In to get coursera courses.</h4>
@@ -38,44 +38,39 @@
         </div>
         <div class="section" id="userDiv">
             <div class="row">
-                <h5 class="col s12 l4 m4 left-align" id="username"></h5>
-                <div class="col s12 l8 m8 center-align" id="">
-                    <div class="row">
-						<div class="col s4">
-							<a class="blue darken-1 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
-						</div>
-						<div class="col s4">
-							<a class="blue darken-1 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
-						</div>
-						<div class="col s4">
-							<a class="red darken-1 waves-effect waves-light btn" id="emailBtn">Email</a>
-						</div>
-                        <input type=hidden value="" id="useremail"></input>
-                    </div>
-                    <div class="row">
-                        <h4>
-								Recommended Courses
-							</h4>
-                    </div>
+                
+                <div class="col s12 l12 m12 center-align" id="">
+                    
+                    <h5 class="" id="username"></h5>
 
                 </div>
 
             </div>
             <div class="row">
-                <div class="col s12 l4 m4">
-                    <!-- <table class="" id="skillsList">
-							<thead>
-								<tr>
-									<th data-field="skills">Skills</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table> -->
-                    <ul class="" id="skillsTags">
+                <div class="col s12 l12 m12">
+                    <ul class=" grey-text" id="skillsTags">
                     </ul>
                 </div>
-                <form class="col s12 l8 m8">
+            </div>
+            <div class="row">
+                <form class="col s12 l12 m12">
+                    <div class="center blue-text row">
+                        <h4>
+                                Recommended Courses
+                            </h4>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <a class="blue darken-1 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
+                        </div>
+                        <div class="col s4">
+                            <a class="blue darken-1 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
+                        </div>
+                        <div class="col s4">
+                            <a class="red darken-1 waves-effect waves-light btn" id="emailBtn">Email</a>
+                        </div>
+                        <input type=hidden value="" id="useremail"></input>
+                    </div>
                     <table class="responsive-table" id="courseList">
                         <thead>
                             <tr>
@@ -150,10 +145,17 @@
                 var emailaddress = res.emailAddress;
                 $('#useremail').val(emailaddress);
                 console.log(firstName + " " + lastName);
-                var skills = res.skills.values;
-                var currentPositions = res.threeCurrentPositions.values;
-                var pastPositions = res.threePastPositions.values;
-                var pros = res.projects.values;
+                if(res.skills!==undefined){
+                    var skills = res.skills.values;
+                    var currentPositions = res.threeCurrentPositions.values;
+                    var pastPositions = res.threePastPositions.values;
+                    var pros = res.projects.values;
+                }else{
+                    var skills = undefined;
+                    var currentPositions = undefined;
+                    var pastPositions = undefined;
+                    var pros = undefined;
+                }
                 $("#username").html(firstName + " " + lastName);
                 // $("#skillsList tbody").empty();
                 $("#skillsTags").empty();
@@ -194,7 +196,7 @@
                         // tr+="<td>"+ skill.skill.name +"</td>";
                         // tr+="</tr>";
                         // $("#skillsList tbody").append(tr);
-                        var li = "<li data-weight='" + parseInt(Math.random() * 25) + "'>";
+                        var li = "<li class='left' data-weight='" + parseInt(Math.random() * 15) + "'>";
                         li += skill.skill.name;
                         li += "</li>";
                         $("#skillsTags").append(li);
@@ -204,7 +206,7 @@
                     });
                     //console.log(objectArray);
                     $("#skillsTags").tx3TagCloud({
-                        multiplier: 2 // default multiplier is "1"
+                        multiplier: 1.5 // default multiplier is "1"
                     });
                     recommendCourses(objectArray);
                     // getPopularSkills(function(res){
