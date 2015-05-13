@@ -21,7 +21,8 @@
 				</script>
 			</ul>
 			<ul class="right hide-on-med-and-down" id="logoutDiv" style="display:none">          
-				<li><a class="" onclick="logout();">Logout</a></li>
+				<!-- <li><a class="" onclick="logout();">Logout</a></li> -->
+				<li><a class="">Logout</a></li>
 			</ul>
 				<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 			</div>
@@ -35,7 +36,20 @@
 			<div class="section" id="userDiv">
 				<div class="row">
 					<h5 class="col s12 l4 m4 left-align" id="username"></h5>
-					<h4 class="col s12 l8 m8 center-align" id="">Recommended Courses</h4>
+					<div class="col s12 l8 m8 center-align" id="">
+						<div class="row">
+							<a class="col s4 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
+							<a class="col s4 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
+							<a class="col s4 waves-effect waves-light btn" id="emailBtn">Email</a>
+						</div>
+						<div class="row">
+							<h4>
+								Recommended Courses
+							</h4>
+						</div>
+					
+					</div>
+
 				</div>
 				<div class="row">
 					<div class="col s12 l4 m4">
@@ -172,13 +186,20 @@
 						$("#skillsTags").tx3TagCloud({
 							multiplier: 2 // default multiplier is "1"
 						});
-
-
 						recommendCourses(objectArray);
+						// getPopularSkills(function(res){
+						// 	console.log("-----iN callback----");
+						// 	console.log(res);
+						// 	recommendCourses(res);
+						// });
+						
 					}else{
 						//if user doesn't have any skills than 
-						// TO be done 
-						//recommendCourses();
+						getPopularSkills(function(res){
+							console.log("-----iN callback----");
+							console.log(res);
+							recommendCourses(res);
+						});
 					}	
 				});
 			}
@@ -192,6 +213,7 @@
 					cache: false,
 					data: {data : JSON.stringify(objectArray)},
 					success: function(res){
+						$("#courseList tbody").empty();
 						res.data.forEach(function(skill){
 							//console.log(skill);
 							courses = JSON.parse(skill.courses);
@@ -201,9 +223,9 @@
 								tr+="<td>"+ course.name +"</td>";
 								tr+="<td><a href='"+ course.url +"'>"+ course.url+ " </a></td>";
 								tr+="</tr>";
-								$("#courseList tbody").append(tr);              
-								console.log(course.name);
-								console.log(course.url);
+								$("#courseList tbody").append(tr);   
+								// console.log(course.name);
+								// console.log(course.url);
 							});
 						});
 						//alert(res.data);
@@ -235,6 +257,47 @@
 				var endYear = endDate.year;
 				return endYear-stYear;
 			}
+
+			function getPopularSkills(callback){
+               console.log('getPopularSkills');
+               $.ajax({
+                   method: "GET",
+                   url: "http://api.stackexchange.com/2.2/tags?order=desc&sort=popular&site=stackoverflow",
+                   cache: false,
+                   success: function(res){
+                   		// console.log("res:");
+                   		// console.log(res);
+                   		var objectArray = new Array();
+                   		res.items.forEach(function(skill){
+                   			var obj = {};
+	                        obj['skill'] = skill.name;
+							obj['count'] = 0;
+							objectArray.push(obj);
+                       	});
+                       	// console.log("objectArray:" + objectArray);
+                   		callback(objectArray);
+						
+                   },
+                   error: function(err){
+
+                   }
+               });
+           }
+
+           $('#popularityBasedBtn').click(function(){
+           		console.log("popularityBasedBtn clicked");
+           		getPopularSkills(function(res){
+					console.log("-----iN callback----");
+					console.log(res);
+					recommendCourses(res);
+				});
+           });
+
+           $('#skillBasedBtn').click(function(){
+           		console.log("skillBasedBtn clicked");
+           		OnLinkedInAuth();
+           });
+
 			
 		</script>
 		
