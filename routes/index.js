@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Q = require('q');
 var request = require("request")
-
+var exports = module.exports = {};
 var UserSchema = mongoose.model('Users');
 var CourseSchema = mongoose.model('Courses');
 
@@ -110,8 +110,12 @@ function findUser(name){
 	return deferred.promise;
 }
 
-router.get('/mycourses', function(req, res){
-	var obj = [
+//router.post('/mycourses', function(req, res){
+var myCourses = function(obj){
+	var deferred = Q.defer();
+	console.log("mycourses called.");
+
+	/*var obj = [
 		{
 			skill: "Java",
 			courses: [
@@ -151,21 +155,32 @@ router.get('/mycourses', function(req, res){
 				}
 			]
 		}
-	];
-	console.log(obj);
+	];*/
+	//console.log(req.body);
+	//var obj = req.body;
+	console.log('obj:'+obj);
 	attachPopularity(obj).then(function(newCourseBySkills){
-		respondData(res, newCourseBySkills);
+		//respondData(res, newCourseBySkills);
+		console.log('newCourseBySkills Results:');
+		console.log(newCourseBySkills);
+		deferred.resolve(newCourseBySkills);
 	}).fail(function(err){
 		console.log(err);
+		deferred.reject(err);
 	});
-});
+
+	return deferred.promise;
+}
 
 var attachPopularity = function(coursesBySkills){
+	console.log('attachPopularity');
 	var count = 0;
 	var deferred = Q.defer();
 	var newCourseBySkills = [];
 	var length = coursesBySkills.length;
+	console.log('length:' + length);
 	coursesBySkills.forEach(function(oneSkillCourses){
+		console.log('oneSkillCourses:' + oneSkillCourses);
 		attachHitsToCourses(oneSkillCourses).then(function(courses){
 			console.log('courses in one skill:' + courses);
 			newCourseBySkills.push({
@@ -187,11 +202,15 @@ var attachPopularity = function(coursesBySkills){
 }
 
 var attachHitsToCourses = function(oneSkillCourses){
+	console.log('attachHitsToCourses');
 	var count = 0;	
 	var deferred = Q.defer();
+	oneSkillCourses.courses = JSON.parse(oneSkillCourses.courses);
+	console.log(oneSkillCourses);
+	
 	var length = oneSkillCourses.courses.length;
 	var courses = [];
-
+	console.log('length oneSkillCourses:' + length);
 	oneSkillCourses.courses.forEach(function(course){
 		var url = course.url;
 		fetchSharedCount(url).then(function(popularity){
@@ -314,3 +333,4 @@ var fetchSharedCount = function(url){
 
 
 module.exports = router;
+module.exports.myCourses = myCourses;

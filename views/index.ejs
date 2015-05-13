@@ -1,60 +1,63 @@
+
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>CMPE 273</title>
-		<script type="text/javascript" src="//platform.linkedin.com/in.js">
-			api_key: 78v5uwh7n4wme2
-			onLoad: OnLinkedInFrameworkLoad
-			authorize: true
-		</script>
-		<link rel="shortcut icon" type="image/x-icon" href="./images/ico/favicon.ico">
-		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
-		<link type="text/css" rel="stylesheet" href="/stylesheets/materialize.css">
-		<link rel='stylesheet' href='/stylesheets/style.css' />
-	</head>
-	<body>
 
-		<nav class="grey darken-3 lighten-1" role="navigation">
-			<div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo">Linked<img src="./images/ico/favicon.ico" width=25px;/> - Coursera</a>
-			<ul class="right hide-on-med-and-down">
-				<script type="in/Login">
-				</script>
-			</ul>
-			<ul class="right hide-on-med-and-down" id="logoutDiv" style="display:none">          
-				<!-- <li><a class="" onclick="logout();">Logout</a></li> -->
-				<li><a class="">Logout</a></li>
-			</ul>
-				<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-			</div>
-		</nav>
-		<div class="container">
-			<div class="section" id="homeDiv">
-				<div class="row center">
-					<h4>Please Log In to get coursera courses.</h4>
-				</div>
-			</div>
-			<div class="section" id="userDiv">
-				<div class="row">
-					<h5 class="col s12 l4 m4 left-align" id="username"></h5>
-					<div class="col s12 l8 m8 center-align" id="">
-						<div class="row">
-							<a class="col s4 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
-							<a class="col s4 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
-							<a class="col s4 waves-effect waves-light btn" id="emailBtn">Email</a>
-							<input type=hidden value="" id="useremail"></input>
-						</div>
-						<div class="row">
-							<h4>
+<head>
+    <title>CMPE 273</title>
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+        api_key: 78 v5uwh7n4wme2
+        onLoad: OnLinkedInFrameworkLoad
+        authorize: true
+    </script>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/ico/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+
+    <nav class="grey darken-3 lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo">Linked<img src="./images/ico/favicon.ico" width=25px;/> - Coursera</a>
+            <ul class="right hide-on-med-and-down">
+                <script type="in/Login">
+                </script>
+            </ul>
+            <ul class="right hide-on-med-and-down" id="logoutDiv" style="display:none">
+                <!-- <li><a class="" onclick="logout();">Logout</a></li> -->
+                <li><a class="">Logout</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+        </div>
+    </nav>
+    <div class="">
+        <div class="section" id="homeDiv">
+            <div class="row center">
+                <h4>Please Log In to get coursera courses.</h4>
+            </div>
+        </div>
+        <div class="section" id="userDiv">
+            <div class="row">
+                <h5 class="col s12 l4 m4 left-align" id="username"></h5>
+                <div class="col s12 l8 m8 center-align" id="">
+                    <div class="row">
+                        <a class="col s4 waves-effect waves-light btn" id="skillBasedBtn">Skill Based</a>
+                        <a class="col s4 waves-effect waves-light btn" id="popularityBasedBtn">Popularity Based</a>
+                        <a class="col s4 waves-effect waves-light btn" id="emailBtn">Email</a>
+                        <input type=hidden value="" id="useremail"></input>
+                    </div>
+                    <div class="row">
+                        <h4>
 								Recommended Courses
 							</h4>
-						</div>
-					
-					</div>
+                    </div>
 
-				</div>
-				<div class="row">
-					<div class="col s12 l4 m4">
-						<!-- <table class="" id="skillsList">
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col s12 l4 m4">
+                    <!-- <table class="" id="skillsList">
 							<thead>
 								<tr>
 									<th data-field="skills">Skills</th>
@@ -63,278 +66,295 @@
 							<tbody>
 							</tbody>
 						</table> -->
-						<ul class="" id="skillsTags">
-						</ul>
-					</div>
-					<form class="col s12 l8 m8">						
-						<table class="" id="courseList">
-							<thead>
-								<tr>
-									<th data-field="SkillName">Skill</th>
-									<th data-field="CourseName">Course Name</th>
-									<th data-field="URL">URL</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</form>	
-				</div>
-				<div class="row">
-					<div class="col s12 l12 m12">
-						<ul class="" id="skillsTags">
-						</ul>
-					</div>
-				</div>
-			</div>
+                    <ul class="" id="skillsTags">
+                    </ul>
+                </div>
+                <form class="col s12 l8 m8">
+                    <table class="responsive-table" id="courseList">
+                        <thead>
+                            <tr>
+                                <th data-field="SkillName">Skill</th>
+                                <th data-field="CourseName">Course Name</th>
+                                <th data-field="URL">URL</th>
+                                <th data-field="FacebookShareCount"><img src="./images/fb.jpeg" width="23px"/></th>
+                                <th data-field="FacebookShareCount"><img src="./images/googleplus.jpeg" width="23px"/></th>
+                                <th data-field="FacebookShareCount"><img src="./images/linkedin.jpeg" width="23px"/></th>
+                                <th data-field="FacebookShareCount"><img src="./images/twitter.jpeg" width="23px"/></th>
+                                <th data-field="Total">Total</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col s12 l12 m12">
+                    <ul class="" id="skillsTags">
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-		</div>
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="/javascripts/materialize.js"></script>
-		<script type="text/javascript" src="/javascripts/jquery.tx3-tag-cloud.js" ></script>
-		<script type="text/javascript">
-			function logout(){
-				IN.User.logout(function(){
-					// $("#skillsList tbody").empty();
-					$("#skillsTags").empty();
-					$("#courseList tbody").empty();
-					$("#username").html("");
-					console.log("Logged out successfully");
-					$('#logoutDiv').hide();
-					$('#userDiv').hide();
-					$('#homeDiv').show();
-				}, function(){
-					console.log("Error Logging out");
-				});
-			}
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="/javascripts/materialize.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.tx3-tag-cloud.js"></script>
+    <script type="text/javascript">
+        function logout() {
+            IN.User.logout(function() {
+                // $("#skillsList tbody").empty();
+                $("#skillsTags").empty();
+                $("#courseList tbody").empty();
+                $("#username").html("");
+                console.log("Logged out successfully");
+                $('#logoutDiv').hide();
+                $('#userDiv').hide();
+                $('#homeDiv').show();
+            }, function() {
+                console.log("Error Logging out");
+            });
+        }
 
-			function OnLinkedInFrameworkLoad() {
+        function OnLinkedInFrameworkLoad() {
 
-				IN.User.authorize(function(){
-					console.log("User logged In");
-					IN.Event.on(IN, "auth", OnLinkedInAuth);
-					$('#homeDiv').hide();
-					$('#logoutDiv').show();
-					$('#userDiv').show();
-					
-				}, function(){
-					$('#homeDiv').show();
-					$('#userDiv').hide();
-					console.log("User logged Out");
-				});
-			}
+            IN.User.authorize(function() {
+                console.log("User logged In");
+                IN.Event.on(IN, "auth", OnLinkedInAuth);
+                $('#homeDiv').hide();
+                $('#logoutDiv').show();
+                $('#userDiv').show();
 
-			function OnLinkedInAuth() {
-				console.log("OnLinkedInAuth");
-				url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects,email-address)?format=json';
+            }, function() {
+                $('#homeDiv').show();
+                $('#userDiv').hide();
+                console.log("User logged Out");
+            });
+        }
 
-				IN.API.Raw().url(url).method('GET').body().result(function(res){
-					//console.log(res);
-					var firstName = res.firstName;
-					var lastName = res.lastName;
-					var emailaddress = res.emailAddress;
-					$('#useremail').val(emailaddress);
-					console.log(firstName + " " + lastName);
-					var skills= res.skills.values;
-					var currentPositions = res.threeCurrentPositions.values;
-					var pastPositions = res.threePastPositions.values;
-					var pros = res.projects.values;
-					$("#username").html(firstName + " " + lastName);
-					// $("#skillsList tbody").empty();
-					$("#skillsTags").empty();
-					$("#courseList tbody").empty();
+        function OnLinkedInAuth() {
+            console.log("OnLinkedInAuth");
+            url = '/people/~:(id,first-name,last-name,skills,three-current-positions,three-past-positions,projects,email-address)?format=json';
 
-					var yearsOfExperience=0;
-					if(currentPositions!==undefined){
-						currentPositions.forEach(function(position){
-							var endDate = {year:new Date().getFullYear()};
-							yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, endDate);
-						});
-					}
-					if(pastPositions!==undefined){
-					
-						pastPositions.forEach(function(position){
-							yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
-						});
-					}
-					var objectArray = new Array();
-					if(skills!=undefined){
-						skills.forEach(function(skill){
+            IN.API.Raw().url(url).method('GET').body().result(function(res) {
+                //console.log(res);
+                var firstName = res.firstName;
+                var lastName = res.lastName;
+                var emailaddress = res.emailAddress;
+                $('#useremail').val(emailaddress);
+                console.log(firstName + " " + lastName);
+                var skills = res.skills.values;
+                var currentPositions = res.threeCurrentPositions.values;
+                var pastPositions = res.threePastPositions.values;
+                var pros = res.projects.values;
+                $("#username").html(firstName + " " + lastName);
+                // $("#skillsList tbody").empty();
+                $("#skillsTags").empty();
+                $("#courseList tbody").empty();
 
-							if(skill.skill.name != 'C++'){
-							//console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
-								var name = skill.skill.name;
-								var skillOccCount = scanProjects(pros, name);
-								//var temp = {name : skillOccCount};
-								if(skillOccCount<5){
-									var obj = {};
-									obj['skill'] = name;
-									obj['count'] = skillOccCount;
-									objectArray.push(obj);
-								}
-							}
-							// var tr = "<tr>";
-							// tr+="<td>"+ skill.skill.name +"</td>";
-							// tr+="</tr>";
-							// $("#skillsList tbody").append(tr);
-							var li = "<li data-weight='" + parseInt(Math.random() * 25) + "'>";
-							li+=skill.skill.name;
-							li+= "</li>";
-							$("#skillsTags").append(li);
-						})
-						objectArray.sort(function(a,b){
-							return b.count - a.count;
-						});
-						//console.log(objectArray);
-						$("#skillsTags").tx3TagCloud({
-							multiplier: 2 // default multiplier is "1"
-						});
-						recommendCourses(objectArray);
-						// getPopularSkills(function(res){
-						// 	console.log("-----iN callback----");
-						// 	console.log(res);
-						// 	recommendCourses(res);
-						// });
-						
-					}else{
-						//if user doesn't have any skills than 
-						getPopularSkills(function(res){
-							console.log("-----iN callback----");
-							console.log(res);
-							recommendCourses(res);
-						});
-					}	
-				});
-			}
+                var yearsOfExperience = 0;
+                if (currentPositions !== undefined) {
+                    currentPositions.forEach(function(position) {
+                        var endDate = {
+                            year: new Date().getFullYear()
+                        };
+                        yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, endDate);
+                    });
+                }
+                if (pastPositions !== undefined) {
 
-			function recommendCourses(objectArray){
-				//console.log(objectArray);
+                    pastPositions.forEach(function(position) {
+                        yearsOfExperience = yearsOfExperience + calculateYears(position.startDate, position.endDate);
+                    });
+                }
+                var objectArray = new Array();
+                if (skills != undefined) {
+                    skills.forEach(function(skill) {
 
-				$.ajax({
-					method: "POST",
-					url: "/rules/recommend",
-					cache: false,
-					data: {data : JSON.stringify(objectArray)},
-					success: function(res){
-						$("#courseList tbody").empty();
-						res.data.forEach(function(skill){
-							//console.log(skill);
-							courses = JSON.parse(skill.courses);
-							courses.forEach(function(course){
-								var tr = "<tr>";
-								tr+="<td>"+ skill.skill +"</td>";
-								tr+="<td>"+ course.name +"</td>";
-								tr+="<td><a href='"+ course.url +"'>"+ course.url+ " </a></td>";
-								tr+="</tr>";
-								$("#courseList tbody").append(tr);   
-								// console.log(course.name);
-								// console.log(course.url);
-							});
-						});
-						//alert(res.data);
-					},
-					error: function(err){
+                        if (skill.skill.name != 'C++') {
+                            //console.log("count of ", skill.skill.name,scanProjects(pros, skill.skill.name));
+                            var name = skill.skill.name;
+                            var skillOccCount = scanProjects(pros, name);
+                            //var temp = {name : skillOccCount};
+                            if (skillOccCount < 5) {
+                                var obj = {};
+                                obj['skill'] = name;
+                                obj['count'] = skillOccCount;
+                                objectArray.push(obj);
+                            }
+                        }
+                        // var tr = "<tr>";
+                        // tr+="<td>"+ skill.skill.name +"</td>";
+                        // tr+="</tr>";
+                        // $("#skillsList tbody").append(tr);
+                        var li = "<li data-weight='" + parseInt(Math.random() * 25) + "'>";
+                        li += skill.skill.name;
+                        li += "</li>";
+                        $("#skillsTags").append(li);
+                    })
+                    objectArray.sort(function(a, b) {
+                        return b.count - a.count;
+                    });
+                    //console.log(objectArray);
+                    $("#skillsTags").tx3TagCloud({
+                        multiplier: 2 // default multiplier is "1"
+                    });
+                    recommendCourses(objectArray);
+                    // getPopularSkills(function(res){
+                    // 	console.log("-----iN callback----");
+                    // 	console.log(res);
+                    // 	recommendCourses(res);
+                    // });
 
-					}
-				});
-			}
+                } else {
+                    //if user doesn't have any skills than 
+                    getPopularSkills(function(res) {
+                        console.log("-----iN callback----");
+                        console.log(res);
+                        recommendCourses(res);
+                    });
+                }
+            });
+        }
 
-			function scanProjects(projects, skill)
-			{
-				var count =0;
-					projects.forEach(function(project){
-						count = count + countOcurrences(project.description, skill);
-					});
-				return count;
-			}
+        function recommendCourses(objectArray) {
+            //console.log(objectArray);
 
-			function countOcurrences(str, value)
-			{
-   				var regExp = new RegExp(value, "gi");
-   				return str.match(regExp) ? str.match(regExp).length : 0;  
-			}
+            $.ajax({
+                method: "POST",
+                url: "/rules/recommend",
+                cache: false,
+                data: {
+                    data: JSON.stringify(objectArray)
+                },
+                success: function(res) {
+                    console.log(res);
+                    $("#courseList tbody").empty();
+                    res.data.forEach(function(skill) {
+                        //console.log(skill);
+                        courses = skill.courses;
+                        //courses = JSON.parse(skill.courses);
+                        courses.forEach(function(course) {
+                            var tr = "<tr>";
+                            tr += "<td>" + skill.skill + "</td>";
+                            tr += "<td>" + course.details.name + "</td>";
+                            tr += "<td><a href='" + course.details.url + "'>" + course.details.url + " </a></td>";
+                            tr += "<td>" + course.popularity.body.Facebook.share_count + "</td>";
+                            tr += "<td>" + course.popularity.body.GooglePlusOne + "</td>";
+                            tr += "<td>" + course.popularity.body.LinkedIn + "</td>";
+                            tr += "<td>" + course.popularity.body.Twitter + "</td>";
+                            tr += "<td>" + course.popularity.hits + "</td>";
+                            
+                            tr += "</tr>";
+                            $("#courseList tbody").append(tr);
+                            // console.log(course.name);
+                            // console.log(course.url);
+                        });
+                    });
+                    //alert(res.data);
+                },
+                error: function(err) {
 
-			function calculateYears(startDate, endDate)
-			{
-				var stYear = startDate.year;
-				var endYear = endDate.year;
-				return endYear-stYear;
-			}
+                }
+            });
+        }
 
-			function getPopularSkills(callback){
-               console.log('getPopularSkills');
-               $.ajax({
-                   method: "GET",
-                   url: "http://api.stackexchange.com/2.2/tags?order=desc&sort=popular&site=stackoverflow",
-                   cache: false,
-                   success: function(res){
-                   		// console.log("res:");
-                   		// console.log(res);
-                   		var objectArray = new Array();
-                   		res.items.forEach(function(skill){
-                   			var obj = {};
-	                        obj['skill'] = skill.name;
-							obj['count'] = 0;
-							objectArray.push(obj);
-                       	});
-                       	// console.log("objectArray:" + objectArray);
-                   		callback(objectArray);
-						
-                   },
-                   error: function(err){
+        function scanProjects(projects, skill) {
+            var count = 0;
+            projects.forEach(function(project) {
+                count = count + countOcurrences(project.description, skill);
+            });
+            return count;
+        }
 
-                   }
-               });
-           }
+        function countOcurrences(str, value) {
+            var regExp = new RegExp(value, "gi");
+            return str.match(regExp) ? str.match(regExp).length : 0;
+        }
 
-           $('#popularityBasedBtn').click(function(){
-           		console.log("popularityBasedBtn clicked");
-           		getPopularSkills(function(res){
-					console.log("-----iN callback----");
-					console.log(res);
-					recommendCourses(res);
-				});
-           });
+        function calculateYears(startDate, endDate) {
+            var stYear = startDate.year;
+            var endYear = endDate.year;
+            return endYear - stYear;
+        }
 
-           $('#skillBasedBtn').click(function(){
-           		console.log("skillBasedBtn clicked");
-           		OnLinkedInAuth();
-           });
+        function getPopularSkills(callback) {
+            console.log('getPopularSkills');
+            $.ajax({
+                method: "GET",
+                url: "http://api.stackexchange.com/2.2/tags?order=desc&sort=popular&site=stackoverflow",
+                cache: false,
+                success: function(res) {
+                    // console.log("res:");
+                    // console.log(res);
+                    var objectArray = new Array();
+                    res.items.forEach(function(skill) {
+                        var obj = {};
+                        obj['skill'] = skill.name;
+                        obj['count'] = 0;
+                        objectArray.push(obj);
+                    });
+                    // console.log("objectArray:" + objectArray);
+                    callback(objectArray);
 
-           $('#emailBtn').click(function(){
-           		console.log("emailBtn clicked");
-           		
-           		email= $('#useremail').val();
-           		console.log(email);
-           		if(email!==""){
-           			var msgbody = $('#courseList tbody').html();
-           			console.log(msgbody);
-	           		$.ajax({
-	                   method: "POST",
-	                   url: '/mailer/email',
-	                   data:{emailId:email, body:msgbody},
-	                   cache: false,
-	                   success: function(res){
-	                   		console.log(res);
-	                   		if(res.type){
-	                   			alert(res.status);
-	                   		}else{
-	                   			alert(res.status);
-	                   		}
-	                   
-	                  	// console.log("objectArray:" + objectArray);
-	                   		callback(objectArray);
-							
-	                   },
-	                   error: function(err){
+                },
+                error: function(err) {
 
-	                   }
-	               });
-           		}
-           });
+                }
+            });
+        }
 
-			
-		</script>
-		
-	</body>
+        $('#popularityBasedBtn').click(function() {
+            console.log("popularityBasedBtn clicked");
+            getPopularSkills(function(res) {
+                console.log("-----iN callback----");
+                console.log(res);
+                recommendCourses(res);
+            });
+        });
+
+        $('#skillBasedBtn').click(function() {
+            console.log("skillBasedBtn clicked");
+            OnLinkedInAuth();
+        });
+
+        $('#emailBtn').click(function() {
+            console.log("emailBtn clicked");
+
+            email = $('#useremail').val();
+            console.log(email);
+            if (email !== "") {
+                var msgbody = $('#courseList tbody').html();
+                console.log(msgbody);
+                $.ajax({
+                    method: "POST",
+                    url: '/mailer/email',
+                    data: {
+                        emailId: email,
+                        body: msgbody
+                    },
+                    cache: false,
+                    success: function(res) {
+                        console.log(res);
+                        if (res.type) {
+                            alert(res.status);
+                        } else {
+                            alert(res.status);
+                        }
+
+                        // console.log("objectArray:" + objectArray);
+                        callback(objectArray);
+
+                    },
+                    error: function(err) {
+
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+
 </html>

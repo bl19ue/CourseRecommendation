@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var q = require('q');
+var http = require('http');
+var index = require('./index'); 
 
 var CourseSchema = mongoose.model('Courses');
 
@@ -13,32 +15,65 @@ router.post('/recommend', function(req, res){
 	//console.log(reqData.length);
 	var data = JSON.stringify(reqData);
 	var result;
-	if(reqDataLength<5){
-		computeSkillArray(data, reqDataLength).then(function(skillArray){
-			findCoursesforSkill(skillArray).then(function(result){
-				console.log("===============Result============");	
-				console.log("Results found: " + result.length);
+
+	computeSkillArray(data, reqDataLength).then(function(skillArray){
+		findCoursesforSkill(skillArray).then(function(result){
+			console.log("===============Result============");	
+			//console.log(result);
+			console.log("Results found: " + result.length);
+
+			
+			index.myCourses(result).then(function(finalResult){
+				console.log("finalResult");
 				res.json({
 					type: true,
-					data: "Response"
-				});
-			});
-		});
+					data: finalResult
+				});	
 
-	}else{
-		computeSkillArray(data, reqDataLength).then(function(skillArray){
-			findCoursesforSkill(skillArray).then(function(result){
-				console.log("===============Result============");	
-				console.log("Results found: " + result.length);
-				res.json({
+			}).fail(function(err){
+				console.log(err);
+			});
+				
+
+/*			var options = {
+			  host: 'localhost',
+			  port: 3001,
+			  path: url,
+			  method: 'POST'
+			};
+			//console.log(options);
+
+			var req = http.request(options, function(res) {
+			  console.log('STATUS: ' + res.statusCode);
+			  console.log('HEADERS: ' + JSON.stringify(res.headers));
+			  res.setEncoding('utf8');
+			  res.on('data', function (chunk) {
+			    console.log('BODY: ' + chunk);
+			    res.json({
 					type: true,
-					data: result
-				});
+					data: chunk
+				});	
+			  });
 			});
-		});
-	}
 
-	
+			req.on('error', function(e) {
+			  console.log('problem with request: ' + e.message);
+			});
+
+			req.write(result);
+
+			req.end();
+*/
+
+			// var request = http.post(url, {skills:result}, function(finalResult){
+			// 	res.json({
+			// 		type: true,
+			// 		data: finalResult
+			// 	});	
+			// });
+			
+		});
+	});
 });
 
 var computeSkillArray = function(reqData, len){
